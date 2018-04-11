@@ -1,0 +1,14 @@
+*this is parameters file
+*name_of_stru     dimension(1D,2D,3D)     length_of_stru(A)     temp_o_system(K)
+ slit_pore        1D                      48                    77.40
+*type_of_wall(LJ, HS),  width_of_wall(A),  number_density_wall(1/A^3), name_of_wall, delta_wall(A)
+ LJ                     20                 1.140E+29                   carbon        3.350
+*type_of_fluids(LJ, HS),     number_of_comp
+ LJ                          1
+*name_of_comp, weight_of_comp(g/mol), sigma_gas(A), epsilon_gas/kB(K), dhs_gas(A), sigma_gw(A), epsilon_gw/kB(K), X(i)
+ N2            28.013                 3.575         94.45              3.575       3.494        53.22             1.0
+
+*approximation_of_HS(FMFT), approximation_of_attr(MSA, FMSA), cut_off_gg(unit:sigma), cut_off_wg(SIGMA)
+ FMFT                       MSA                               5                     20
+*iteration_times, iteration_err, num_deltx
+ 10000            1.0E-3         10

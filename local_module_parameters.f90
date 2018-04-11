@@ -1,0 +1,35 @@
+module local_module_parameters
+  real*8,parameter::x1 = 0.8623085097507421
+  real*8,parameter::x2 = 2.976218765822098
+  real*8,parameter::x3 = -8.402230115796038
+  real*8,parameter::x4 = 0.1054136629203555
+  real*8,parameter::x5 = -0.8564583828174598
+  real*8,parameter::x6 = 1.582759470107601
+  real*8,parameter::x7 = 0.7639421948305453
+  real*8,parameter::x8 = 1.753173414312048
+  real*8,parameter::x9 = 2.798291772190376d03
+  real*8,parameter::x10 = -4.8394220260857657d-02
+  real*8,parameter::x11 = 0.9963265197721935
+  real*8,parameter::x12 = -3.698000291272493d01
+  real*8,parameter::x13 = 2.084012299434647d01
+  real*8,parameter::x14 = 8.305402124717285d01
+  real*8,parameter::x15 = -9.574799715203068d02
+  real*8,parameter::x16 = -1.477746229234994d02
+  real*8,parameter::x17 = 6.398607852471505d01
+  real*8,parameter::x18 = 1.603993673294834d01
+  real*8,parameter::x19 = 6.805916615864377d01
+  real*8,parameter::x20 = -2.791293578795945d03
+  real*8,parameter::x21 = -6.245128304568454
+  real*8,parameter::x22 = -8.116836104958410d03
+  real*8,parameter::x23 = 1.488735559561229d01
+  real*8,parameter::x24 = -1.059346754655084d04
+  real*8,parameter::x25 = -1.131607632802822d02
+  real*8,parameter::x26 = -8.867771540418822d03
+  real*8,parameter::x27 = -3.986982844450543d01
+  real*8,parameter::x28 = -4.689270299917261d03
+  real*8,parameter::x29 = 2.593535277438717d02
+  real*8,parameter::x30 = -2.694523589434903d03
+  real*8,parameter::x31 = -7.218487631550215d02
+  real*8,parameter::x32 = 1.721802063863269d02
+
+end module local_module_parameters
