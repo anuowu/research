@@ -27,6 +27,7 @@ subroutine comp_bulk_pot
 
   !write(*,*) 'open a bulk file'
   open(22, file = "out_bulk_property.dat")
+  write(22,"2(A15,5X),3(A20,5X),2(A10,5X)" ) "number","pressure", "density", "real density", "bulk chemical potential", "iteration times:nu", "error"
   !! calculate the different components bulk density
   Ts = temperature/ep ! because here ep unit is K
   do i = 1, num_press
@@ -71,15 +72,16 @@ subroutine comp_bulk_pot
       sigxrho(j) = (sigxrho(j) - si) * 2 /(rhos0/si)
       epsixrho(j) = (epsixrho(j)/si-ep)*2/(rhos0/si) - sigxrho(j)*ep/si
       Arxrho(j) = (Ps/rhos0**2-Ts/rhos0)*(si+(rhos0/si)*sigxrho(j)) - (Ar-Ur)*epsixrho(j)/ep
-      Miu(i,j) = Ar*ep + Ar*rhos0/si*epsixrho(j) + rhos0/si*ep*Arxrho(j) ! unit of Miu(i,j) depends on the epsilon_gas
+      Miu(i,j) = (Ar*ep + Ar*rhos0/si*epsixrho(j) + rhos0/si*ep*Arxrho(j))/temperature ! unit of Miu(i,j) depends on the epsilon_gas,
+      !now it is unitless after we divided Temperature
     end do
 
     ! out put bulk density
-    write(22,*) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), (Miu(i,j), j=1, number_of_comp), nu, errps
+    write(22,229) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), (Miu(i,j), j=1, number_of_comp), nu, errps
 
   end do
   close(22)
-
+  229 format(I5,4X,F13.6,4X,3(F15.6,4X),I5,4X,F13.6)
 end subroutine
 
 ! function re_Ur get the reduced internal energy
