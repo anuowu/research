@@ -5,17 +5,10 @@ subroutine com_hs_pot
   use local_module_mfmt
   implicit none
 
-
-  do i = 1, NL
+  do i = 0, NL
     xi = xnf+i*deltx
     xc = 100
 
-    n2(:) = 0.0
-    n3(:) = 0.0
-    nv2(:) = 0.0
-    n0(:) = 0.0
-    n1(:) = 0.0
-    nv1(:) = 0.0
     n_0 = 0.0
     n_1=0.0
     n_2=0.0
@@ -64,7 +57,7 @@ subroutine com_hs_pot
 
   end do ! z position
 
-  do i = 1, NL
+  do i = 0, NL
     xi = xnf + i*deltx
     xc = 100
 
@@ -93,7 +86,7 @@ subroutine com_hs_pot
       dfn3 = dfn3 * pi
       dfnv1 = dfnv1/sigma_gas(j)
       dfnv2 = dfnv2*2*pi
-      cp_hs(j,i) = dfn0+dfn1+dfn2+dfn3+dfnv1+dfnv2
+      cp_hs(j,i) = dfn0+dfn1+dfn2+dfn3+dfnv1+dfnv2 !here cp_hs is unitless
 
     end do ! end components
 
@@ -129,12 +122,12 @@ subroutine qfi(fi, xxi)
   integer L
 
   if ( xxi <= xnf ) then
-    fi(0) = fi0(1)
-    fi(1) = fi1(1)
-    fi(2) = fi2(1)
-    fi(3) = fi3(1)
-    fi(4) = fiv1(1)
-    fi(5) = fiv2(1)
+    fi(0) = fi0(0)
+    fi(1) = fi1(0)
+    fi(2) = fi2(0)
+    fi(3) = fi3(0)
+    fi(4) = fiv1(0)
+    fi(5) = fiv2(0)
   else if(xxi >= (xnf+NL*deltx)) then
     fi(0) = fi0(NL)
     fi(1) = fi1(NL)
