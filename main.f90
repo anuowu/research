@@ -46,7 +46,7 @@ program main
       do j = 1, number_of_comp
         do k = 0, NL
           read(88,*) aa, bb, cc, P(j,k), dd ! i, j, k, P, PP
-          P(j,k) = P(j,k) + rho0(i,j) - rho0(i-1,j)
+          P(j,k) = P(j,k) + rho0(i,j) - rho0(i-1,j) ! P(j,k) is reduced density
           if(P(j,k) < 0.0)  P(j,k) = 0.0
         end do
       end do
@@ -72,7 +72,6 @@ program main
         !write(*,*) 'start the att calculation'
         ! calculate Att chemical potetial and ATT free energy
         call com_att_pot
-
 
         err1=0.0
         sum0 = xnf*P(j,0)

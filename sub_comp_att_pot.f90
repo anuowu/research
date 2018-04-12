@@ -28,7 +28,7 @@ subroutine com_att_pot
           cp_att(j,k) = cp_att(j,k) + 0.5*P(mj, iz)*miu_attz(j,mj,ikz)*deltx
         end do
       end do
-
+      cp_att(j,k) = cp_att(j,k)/temperature !here cp_att is unitless
     end do
   end do
 end subroutine

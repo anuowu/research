@@ -12,12 +12,10 @@ subroutine miu_att
   write(*,*) 'x_cut=', x_cut, 'xc=', xc, 'ddx=', ddx, 'r_cut is', r_cut
   do j = 1, number_of_comp
     do k = 1, number_of_comp
-      write(*,*) '****'
       sigma_jk = (sigma_gas(j)+sigma_gas(k))/2.0
       eplison_jk = sqrt(epsilon_gas(j)*epsilon_gas(k))
       r1 = 2.**(1./6.)*sigma_jk
       uffc = 4.0*eplison_jk*((sigma_jk/x_cut)**12-(sigma_jk/x_cut)**6)
-      write(*,*) 'start i'
       do i = 0, xc
         xi = i*ddx
         !write(*,*) 'start m'
