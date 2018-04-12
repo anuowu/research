@@ -77,7 +77,7 @@ subroutine system_def
   length_of_stru = length_of_stru/d_min
   width_of_wall = width_of_wall/d_min
   delta_wall = delta_wall/d_min
-  write(*,*) 'sigmamax is:', sigmamax, 'd_min is:', d_min
+  write(*,*) 'd_min is:', d_min
   sigmamax = sigmamax/d_min
   write(*,*) 'sigmamax is:', sigmamax
   deltx = 1.0 / num_deltx

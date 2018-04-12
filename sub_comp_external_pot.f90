@@ -10,7 +10,6 @@ subroutine comp_external_pot
 
   ! need the definition of the system
   ! need parameters, if it is a LJ wall
-  write(*,*) '4 number_of_comp', number_of_comp
   open(41,file='external_potential.dat')
   do j=1, number_of_comp
     write(*,*) 'NL=', NL
@@ -38,7 +37,8 @@ subroutine comp_external_pot
           *epsilon_gw(j)*(0.4*re_position**(-10) - re_position**(-4) &
           - sigma_gw(j)**4/(3.0*delta_wall*(position+0.61*delta_wall)**3))
         end if
-        cp_ext(j,i)=cp_ext(j,i)*d_min**3 !! becaust here the sigma_gw is reduced diameter
+        cp_ext(j,i)=cp_ext(j,i)*d_min**3/temperature !! becaust here the sigma_gw is reduced diameter
+        ! here cp_ext(j,i) is unitless, canbe used in iteration equation in main.f90
         write(41,*) j, xi, cp_ext(j,i)
       end if
       !write(*,*) '5 number_of_comp', number_of_comp
