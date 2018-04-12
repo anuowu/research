@@ -11,7 +11,7 @@ subroutine comp_external_pot
   ! need the definition of the system
   ! need parameters, if it is a LJ wall
   open(41,file='out_external_potential.dat')
-  write(41, "3(A20, 5X)") "type of components", "position", "unitless potential"
+  write(41, "(A20,4X,A20,4X,A20)") "type of components", "position", "unitless potential"
   do j=1, number_of_comp
     write(*,*) 'NL=', NL
     do i=0,NL ! start from 0 or 1

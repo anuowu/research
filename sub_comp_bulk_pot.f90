@@ -27,7 +27,8 @@ subroutine comp_bulk_pot
 
   !write(*,*) 'open a bulk file'
   open(22, file = "out_bulk_property.dat")
-  write(22,"2(A15,5X),3(A20,5X),2(A10,5X)" ) "number","pressure/pa", "density", "real density/mol/m^3", "bulk chemical potential", "iteration times:nu", "error"
+  write(22,*) "number","pressure/pa", "density", "real density/mol/m^3", &
+  "bulk chemical potential", "iteration times:nu", "error"
   !! calculate the different components bulk density
   Ts = temperature/ep ! because here ep unit is K
   do i = 1, num_press
@@ -77,7 +78,8 @@ subroutine comp_bulk_pot
     end do
 
     ! out put bulk density
-    write(22,229) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), (Miu(i,j), j=1, number_of_comp), nu, errps
+    write(22,229) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), &
+    (Miu(i,j), j=1, number_of_comp), nu, errps
 
   end do
   close(22)

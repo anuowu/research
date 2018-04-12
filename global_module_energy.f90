@@ -15,7 +15,7 @@ module global_module_energy
   !common P, PP
 
   ! define hs terms
-  real*8, save:: fi0(max_NL), fi1(max_NL), fi2(max_NL), fi3(max_NL), fiv1(max_NL), fiv2(max_NL) ! varies for MFMT
+  real*8, save:: fi0(0:max_NL), fi1(0:max_NL), fi2(0:max_NL), fi3(0:max_NL), fiv1(0:max_NL), fiv2(0:max_NL) ! varies for MFMT
   real*8, save:: cp_hs(compmax, 0:max_NL), phi(0:max_NL)
   !common fi0, fi1, fi2, fi3, fiv1, fiv2
   !common cp_hs, phi
