@@ -4,8 +4,7 @@ subroutine miu_att
   integer xc,j,k,m,i
   real*8 x_cut, ddx, sigma_jk, eplison_jk, r1, uffc, xi, xm, rr, rs, uff,r_cut
 
-  write(*,*) 'here is miu_att'
-  write(*,*) 'sigmamax=', sigmamax, 'deltx=', deltx
+  miu_attz(:,:,:) =0.0
   r_cut = cut_off_gg
   x_cut = sigmamax*r_cut
   xc = int(x_cut/(0.999*deltx))
@@ -38,7 +37,6 @@ subroutine miu_att
         miu_attz(j,k,i) = miu_attz(j,k,i)*2*pi*ddx
         !write(*,*) 'miu_attz(j,k,i) is',miu_attz(j,k,i)
       end do !end i
-      write(*,*) '*******'
     end do !end component k
   end do ! end component j
 
