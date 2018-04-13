@@ -35,6 +35,12 @@ program main
   open(39, file="out_calculation_process.dat")
   open(32, file="out_density_profile.dat")
   open(33, file="out_thermodynamic_properties.dat")
+  write(31,*) "numb "," component "," iteration times ", " Picard factor ", " err1 ", " err_adsop ", " err" !i, j,number, F, err1, err_adsop, err
+  write(39,*) "numb ", " component ", " prressure/Pa ", " bulk density(ge/A^3) ", " iteration times ", " err "!i,j, pres(i), rho0(i,j), number, err
+  write(32,*) "numb ", " component ", " prressure/Pa ", " bulk density(ge/A^3) ", " position ", " P ", " PP "!i, j, pres(i), rho0(i,j), xnf+m*deltx, P(j,m), PP(j,m)
+  write(33,*)  "numb ", " component ", " prressure/Pa ", " bulk density(ge/A^3) ", " chemical poten ", " grand potential ", &
+                " ADSP0 ", " ADSP1 ", " ADSP2 ", " ADSP3 "
+  !i, j, pres(i), rho0(i,j), CP(i,j), GRP(i,j), ADSP0(j,i), ADSP1(j,i), ADSP2(j,i), ADSP3(j,i)
 
   write(*,*) "Start the main process!"
   do i = 1, num_press ! presusre

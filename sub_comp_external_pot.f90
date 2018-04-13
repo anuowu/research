@@ -49,5 +49,5 @@ subroutine comp_external_pot
   end do
   !write(*,*) '7 number_of_comp', number_of_comp
   close(41)
-  419 format(I5, 5X, F13.6, 5X, E12.6)
+  419 format(I5, 2X, F13.6, 2X, E12.6)
 end subroutine

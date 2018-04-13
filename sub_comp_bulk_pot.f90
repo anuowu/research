@@ -27,8 +27,8 @@ subroutine comp_bulk_pot
 
   !write(*,*) 'open a bulk file'
   open(22, file = "out_bulk_property.dat")
-  write(22,*) "number "," pressure/pa ", " density ", " real density/mol/m^3 ", &
-  " bulk chemical potential ", " iteration times:nu ", " error "
+  write(22,*) "1number "," 2pressure/pa ", " 3density(ge/A^3) ", " 4real density/mol/m^3 ", &
+  " 5bulk excess chemical potential ", " 6iteration times:nu ", " 7error "
   !! calculate the different components bulk density
   Ts = temperature/ep ! because here ep unit is K
   do i = 1, num_press
@@ -52,7 +52,7 @@ subroutine comp_bulk_pot
 
     ! get pre components' bulk density
     do j = 1, number_of_comp
-      rho0(i,j) = X(j) * (rhos0/(si*d_min**3)) ! rho0, X(j) are global varies.rho0 here is reduced density
+      rho0(i,j) = X(j) * (rhos0/(si*d_min**3)) ! rho0, X(j) are global varies.rho0 here is one/A^3
       rho_real(i,j) = rho0(i,j)*1.0E30/VNMOL ! here unit is mol/m^3
       write(*,*) 'rhos0 is:', rhos0, 'rho0 is:', rho0(i,j), 'real density(mol/m^3):', rho_real(i,j)
     end do ! because si here is a reduced parameter
@@ -74,7 +74,7 @@ subroutine comp_bulk_pot
       epsixrho(j) = (epsixrho(j)/si-ep)*2/(rhos0/si) - sigxrho(j)*ep/si
       Arxrho(j) = (Ps/rhos0**2-Ts/rhos0)*(si+(rhos0/si)*sigxrho(j)) - (Ar-Ur)*epsixrho(j)/ep
       Miu(i,j) = (Ar*ep + Ar*rhos0/si*epsixrho(j) + rhos0/si*ep*Arxrho(j))/temperature ! unit of Miu(i,j) depends on the epsilon_gas,
-      !now it is unitless after we divided Temperature
+      !now it is kBT after we divided Temperature
     end do
 
     ! out put bulk density
@@ -83,7 +83,7 @@ subroutine comp_bulk_pot
 
   end do
   close(22)
-  229 format(I5,4X,F13.6,4X,3(F15.6,4X),I5,4X,F13.6)
+  229 format(I5,2X,F13.6,2X,3(F10.6,2X),I5,2X,F10.6)
 end subroutine
 
 ! function re_Ur get the reduced internal energy
