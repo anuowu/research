@@ -17,7 +17,7 @@ subroutine comp_external_pot
     do i=0,NL ! start from 0 or 1
       xi = xnf+i*deltx
       if ( xi >= length_of_stru/2.0 ) then
-        cp_ext(j,i) = 200 ! here take care of the unit
+        cp_ext(j,i) = 200 ! here take care of the unit is kBT
       else
         position = length_of_stru/2.0 - xi
         re_position = position/sigma_gw(j)
