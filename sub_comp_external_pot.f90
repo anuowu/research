@@ -17,14 +17,15 @@ subroutine comp_external_pot
     do i=0,NL ! start from 0 or 1
       xi = xnf+i*deltx
       if ( xi >= length_of_stru/2.0 ) then
-        cp_ext(j,i) = 200*temperature ! here take care of the unit
+        cp_ext(j,i) = 200 ! here take care of the unit
       else
         position = length_of_stru/2.0 - xi
         re_position = position/sigma_gw(j)
+        write(*,*) "xi is:", xi, "re_position is:", re_position, 'cut_off_wg:', cut_off_wg
         if ( re_position > cut_off_wg ) then
           cp_ext(j,i) = 0.0
         else !!cp_ext(j,i) unit depends on epsilon_gw
-          cp_ext(j,i) = 2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2*epsilon_gw(j)
+          cp_ext(j,i) = 2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2*d_min**3*epsilon_gw(j)/temperature
           cp_ext(j,i) = cp_ext(j,i)*(0.4*re_position**(-10) - re_position**(-4) &
           - sigma_gw(j)**4/(3.0*delta_wall*(position+0.61*delta_wall)**3))
         end if
@@ -34,12 +35,12 @@ subroutine comp_external_pot
         if ( re_position > cut_off_wg ) then
           cp_ext(j,i) = cp_ext(j,i)+0.0
         else
-          cp_ext(j,i) = cp_ext(j,i)+2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2 &
-          *epsilon_gw(j)*(0.4*re_position**(-10) - re_position**(-4) &
+          cp_ext(j,i) = cp_ext(j,i)+2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2*d_min**3 &
+          *(epsilon_gw(j)/temperature)*(0.4*re_position**(-10) - re_position**(-4) &
           - sigma_gw(j)**4/(3.0*delta_wall*(position+0.61*delta_wall)**3))
         end if
-        cp_ext(j,i)=cp_ext(j,i)*d_min**3/temperature !! becaust here the sigma_gw is reduced diameter
-        ! here cp_ext(j,i) is unitless, canbe used in iteration equation in main.f90
+        !! becaust here the sigma_gw is reduced diameter
+        ! here cp_ext(j,i) is kBT, canbe used in iteration equation in main.f90
       end if
       write(41,419) j, xi, cp_ext(j,i)
       write(*,*) j, xi, cp_ext(j,i)
