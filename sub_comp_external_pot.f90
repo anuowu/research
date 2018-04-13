@@ -11,13 +11,13 @@ subroutine comp_external_pot
   ! need the definition of the system
   ! need parameters, if it is a LJ wall
   open(41,file='out_external_potential.dat')
-  write(41, "(A20,4X,A20,4X,A20)") "type of components", "position", "unitless potential"
+  write(41, "(A20,4X,A12,4X,A20)") "type of components", "position", "unitless potential"
   do j=1, number_of_comp
     write(*,*) 'NL=', NL
     do i=0,NL ! start from 0 or 1
       xi = xnf+i*deltx
       if ( xi >= length_of_stru/2.0 ) then
-        cp_ext(j,i) = 1.0E30 ! here take care of the unit
+        cp_ext(j,i) = 200*temperature ! here take care of the unit
       else
         position = length_of_stru/2.0 - xi
         re_position = position/sigma_gw(j)
@@ -40,13 +40,13 @@ subroutine comp_external_pot
         end if
         cp_ext(j,i)=cp_ext(j,i)*d_min**3/temperature !! becaust here the sigma_gw is reduced diameter
         ! here cp_ext(j,i) is unitless, canbe used in iteration equation in main.f90
-        write(41,419) j, xi, cp_ext(j,i)
       end if
-      !write(*,*) '5 number_of_comp', number_of_comp
+      write(41,419) j, xi, cp_ext(j,i)
+      write(*,*) j, xi, cp_ext(j,i)
     end do
     !write(*,*) '6 number_of_comp', number_of_comp
   end do
   !write(*,*) '7 number_of_comp', number_of_comp
   close(41)
-  419 format(I5, 5X, F13.6, 5X, F13.6)
+  419 format(I5, 5X, F13.6, 5X, E12.6)
 end subroutine
