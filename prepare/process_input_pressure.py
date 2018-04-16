@@ -1,4 +1,4 @@
-max_press = 1.0E6
+max_press = 1.2E5
 pres_start = 1.0E-8
 
 pres = []
@@ -18,4 +18,5 @@ f = open('input_pressure.dat', 'w')
 f.write("{} {} {} {} {} {}\n".format(repr('nb').ljust(4), repr('pres(pa)').ljust(20), repr('c').ljust(4), repr('picard_factor').ljust(4), repr('IFDEN').ljust(4), repr('ITERA').ljust(4) ))
 for i in range(120):
     f.write("{} {} {} {} {} {}\n".format(repr(i+1).ljust(4), repr(pres[i]).ljust(20), repr(c).ljust(4), repr(picard_factor).ljust(8), repr(IFDEN).ljust(4), repr(ITERA).ljust(4) ))
+f.write("{} {} {} {} {} {}\n".format(repr(0).ljust(4), repr(0).ljust(20), repr(0).ljust(4), repr(0).ljust(4), repr(0).ljust(4), repr(0).ljust(4) ))
 f.close()

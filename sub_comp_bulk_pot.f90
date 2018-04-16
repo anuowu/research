@@ -5,7 +5,7 @@ subroutine comp_bulk_pot
   use global_module_energy
   implicit none
   real*8 re_pres, re_Ar, re_Ur
-  real*8 si, ep, errps, Ts, Ps, rhos0, Ps0, rhos, Ar, Ur
+  real*8 si, ep, errps, Ts, Ps, rhos0, Ps0, rhos, Ar, Ur,rho11
   real*8 sigxrho(max_num_press),epsixrho(max_num_press), Arxrho(max_num_press)
   integer nu, i, j, k
   external re_pres, re_Ar, re_Ur
@@ -14,6 +14,7 @@ subroutine comp_bulk_pot
   ! get the sigma_x and eplison_x for mixture in MBWR
   si = 0.0
   ep = 0.0
+  rho11 = 0.0
   !write(*,*) '3 number_of_comp', number_of_comp
   do i = 1, number_of_comp
     do j= 1, number_of_comp
@@ -26,30 +27,33 @@ subroutine comp_bulk_pot
   ep=ep/si
 
   !write(*,*) 'open a bulk file'
+  open(25, file = "compare.dat")
+  write(25,*) "1number ", " 2press/pa ", " 3Ps ", " 4Ps0 ", " 5errps ", " 6rhos0"
   open(22, file = "out_bulk_property.dat")
-  write(22,*) "1number "," 2pressure/pa ", " 3density(ge/A^3) ", " 4real density/mol/m^3 ", &
+  write(22,*) "1number "," 2pressure/pa ", " 3density(ge/A^3) ", " 4real density/mol/m^3 ", " idea density(mol/m^3) ", &
   " 5bulk excess chemical potential ", " 6iteration times:nu ", " 7error "
   !! calculate the different components bulk density
   Ts = temperature/ep ! because here ep unit is K
   do i = 1, num_press
 
-    Ps = pres(i)*(si*1.0E-30)/(ep*kB) !because Pres is ISO，so si and ep is transfered to ISO
+    Ps = pres(i)*(si*1.0E-30*d_min**3)/(ep*kB) !because Pres is ISO，so si and ep is transfered to ISO
     rhos0 = pres(i)/temperature/kB*1.0E-30*si*d_min**3 !here unit is rho*sigma^3, it is reduced
+    rho11 = pres(i)/temperature/kB/VNMOL ! MOL/m^3
     Ps0 = re_pres(rhos0, Ts)
-    errps = (Ps - Ps0)
+    errps = (Ps - Ps0)/Ps
     write(*,*) 'i is:', i, 'Ps is:', Ps, "Ps0 is:", Ps0
-    write(*,*) 'the reduced bulk density is', rhos0, 'errps is:', errps
+    !write(*,*) 'the reduced bulk density is', rhos0, 'errps is:', errps
     nu=0
-    do while (abs(errps) > 0.001 .and. nu < 2000)
+    do while (abs(errps) > 1.0E-4 .and. nu < 2000)
       nu=nu+1
       rhos = rhos0 * (1+errps)
       Ps0 = re_pres(rhos, Ts)
-      errps = (Ps - Ps0)
+      errps = (Ps - Ps0)/Ps
       rhos0 = rhos
-      write(*,*) 'Ps0 is:', Ps0
-      write(*,*) 'errps is:', errps, 'rhos0 is:', rhos0
+      !write(*,*) 'Ps0 is:', Ps0
+      !write(*,*) 'errps is:', errps, 'rhos0 is:', rhos0
     end do
-
+    write(25,*) i, pres(i), Ps, Ps0, errps, rhos0
     ! get pre components' bulk density
     do j = 1, number_of_comp
       rho0(i,j) = X(j) * (rhos0/(si*d_min**3)) ! rho0, X(j) are global varies.rho0 here is one/A^3
@@ -78,12 +82,13 @@ subroutine comp_bulk_pot
     end do
 
     ! out put bulk density
-    write(22,229) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), &
+    write(22,229) i, pres(i), (rho0(i,j), j=1,number_of_comp), (rho_real(i,j),j=1,number_of_comp), rho11, &
     (Miu(i,j), j=1, number_of_comp), nu, errps
 
   end do
   close(22)
-  229 format(I5,2X,F13.6,2X,3(F10.6,2X),I5,2X,F10.6)
+  close(25)
+  229 format(I5,2X,F13.6,2X,4(F10.6,2X),I5,2X,F10.6)
 end subroutine
 
 ! function re_Ur get the reduced internal energy
