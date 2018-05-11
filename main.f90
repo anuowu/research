@@ -12,6 +12,7 @@ program main
   real*8 adsp,adspp, VDP, SDP, VDS
   real*8 dllw, cpid, aa, bb, cc, dd, F
   real*8 time(0:1)
+  real*8 x_, as !for miu test
   integer i, number, m, j, k
 
   call cpu_time (time(0))
@@ -41,11 +42,13 @@ program main
   write(33,*)  "numb ", " component ", " prressure/Pa ", " bulk density(ge/A^3) ", " chemical poten ", " grand potential ", &
                 " ADSP0 ", " ADSP1 ", " ADSP2 ", " ADSP3 "
   !i, j, pres(i), rho0(i,j), CP(i,j), GRP(i,j), ADSP0(j,i), ADSP1(j,i), ADSP2(j,i), ADSP3(j,i)
-
+  open(56,file="out_test_deltmiu.dat")
+  write(56,*) 'numb ', ' component ', ' position ', '  Miu(kBT)  ','  cp_hs(j,k)(kBT)  ', '  cp_att(j,k)(kBT)  ', &
+               '  cp_ext(j,k)(kBT)  ', '  delta_miu(kBT)'
   write(*,*) "Start the main process!"
   do i = 1, num_press ! presusre
     ! need to define the initial density distribution of components
-    write(*,*) 'Now the pressure is pressure is', pres(i)
+    write(*,*) 'Now the pressure is:', pres(i)
     F = pica_factor(i)
     if ( i > 1 ) then
       open(88, file = "density_exchange_file.dat")
@@ -80,11 +83,12 @@ program main
         call com_att_pot
 
         err1=0.0
+        P(j,0) = rho0(i,j)
         sum0 = xnf*P(j,0)
-        PP(j,0) = rho0(i,j) * exp( Miu(i,j) - cp_hs(j,0) - cp_att(j,0) - cp_ext(j,0) )
+        PP(j,0) = rho0(i,j) !* exp( Miu(i,j) - cp_hs(j,0) - cp_att(j,0) - cp_ext(j,0) )
         sum1 = xnf*PP(j,0)
-
         do k = 1, NL
+          x_ = xnf+k*deltx
           PP(j,k) = rho0(i,j) * exp( Miu(i,j) - cp_hs(j,k) - cp_att(j,k) - cp_ext(j,k) )
           if ( PP(j,k)>1.0e-10 ) then
             err_density = abs(PP(j,k)-P(j,k))/max(PP(j,k), P(j,k))
@@ -95,14 +99,16 @@ program main
           sum0 = sum0+P(j,k)*deltx
           sum1 = sum1+PP(j,k)*deltx
           P(j,k) = P(j,k)*(1.0-F) + PP(j,k)*F
-          !write(*,*) 'now we are in position:', k
+          ! here the for test
+          as = Miu(i,j) - cp_hs(j,k) - cp_att(j,k) - cp_ext(j,k)
+          write(56,*) i, j, x_, Miu(i,j), cp_hs(j,k), cp_att(j,k), cp_ext(j,k), as
         end do
 
         err_adsop = abs(sum1-sum0)/max(abs(sum1), abs(sum0))
         err=max(err1, err_adsop)
         write(*,*) "I'm in the picard iteration", 'err1:',err1, 'err_adsop:',err_adsop, 'err',err
         ! output the iteration process
-        if (ITERA(i).eq.1) then ! ITERA not define
+        if (ITERA(i).eq.1) then
           write(*,111) i, j, number, F, err1, err_adsop, err
           write(31, 111) i, j,number, F, err1, err_adsop, err
         end if
@@ -148,7 +154,7 @@ program main
       VDS=2*width_of_wall
       adspp=rho0(i,j)*VDP ! bulk
       ADSP0(j,i)=adspp/(VNMOL*SDP*d_min**2) !per pore area
-      ADSP1(j,i)=2*adsp/(VNMOL*SDP*d_min**2) ! per pore area
+      ADSP1(j,i)=2*adsp/(VNMOL*SDP) ! per pore area
       ADSP2(j,i)=2*adsp/(VNMOL*VDP*d_min**3) ! per pore volume
       ADSP3(j,i)=2*adsp/(VNMOL*VDS*d_min**3) ! per adsorbent volume
 
@@ -172,6 +178,7 @@ program main
   close(32)
   close(33)
   close(39)
+  close(56)
   call cpu_time (time(1))
   !time_diff = time(1)- time(0)
   write(*,*) 'the total time cost:', time(1)-time(0), 'seconds'
