@@ -11,7 +11,7 @@ subroutine comp_external_pot
   ! need the definition of the system
   ! need parameters, if it is a LJ wall
   open(41,file='out_external_potential.dat')
-  write(41, "(A20,4X,A12,4X,A20)") "type of components", "position", "unitless potential"
+  write(41, "(A20,2X,A12,2X,A20)") "type of components", "relative position", "unitless potential"
   do j=1, number_of_comp
     write(*,*) 'NL=', NL
     do i=0,NL ! start from 0 or 1
@@ -21,13 +21,13 @@ subroutine comp_external_pot
       else
         position = length_of_stru/2.0 - xi
         re_position = position/sigma_gw(j)
-        write(*,*) "xi is:", xi, "re_position is:", re_position, 'cut_off_wg:', cut_off_wg
+        write(*,*) "xi is: ", xi, " re_position is: ", re_position, ' cut_off_wg: ', cut_off_wg
         if ( re_position > cut_off_wg ) then
           cp_ext(j,i) = 0.0
         else !!cp_ext(j,i) unit depends on epsilon_gw
           cp_ext(j,i) = 2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2*d_min**3*epsilon_gw(j)/temperature
-          cp_ext(j,i) = cp_ext(j,i)*(0.4*re_position**(-10) - re_position**(-4) &
-          - sigma_gw(j)**4/(3.0*delta_wall*(position+0.61*delta_wall)**3))
+          cp_ext(j,i) = cp_ext(j,i)*(0.4d0*re_position**(-10d0) - re_position**(-4d0) &
+          - sigma_gw(j)**4d0/(3.0d0*delta_wall*(position+0.61d0*delta_wall)**3d0))
         end if
 
         position = length_of_stru/2.0+xi
@@ -35,19 +35,19 @@ subroutine comp_external_pot
         if ( re_position > cut_off_wg ) then
           cp_ext(j,i) = cp_ext(j,i)+0.0
         else
-          cp_ext(j,i) = cp_ext(j,i)+2.0*pi*number_density_wall*delta_wall*sigma_gw(j)**2*d_min**3 &
-          *(epsilon_gw(j)/temperature)*(0.4*re_position**(-10) - re_position**(-4) &
-          - sigma_gw(j)**4/(3.0*delta_wall*(position+0.61*delta_wall)**3))
+          cp_ext(j,i) = cp_ext(j,i)+2.0d0*pi*number_density_wall*delta_wall*sigma_gw(j)**2d0*d_min**3d0 &
+          *(epsilon_gw(j)/temperature)*(0.4d0*re_position**(-10d0) - re_position**(-4d0) &
+          - sigma_gw(j)**4d0/(3.0d0*delta_wall*(position+0.61d0*delta_wall)**3d0))
         end if
         !! becaust here the sigma_gw is reduced diameter
         ! here cp_ext(j,i) is kBT, canbe used in iteration equation in main.f90
       end if
       write(41,419) j, xi, cp_ext(j,i)
-      write(*,*) j, xi, cp_ext(j,i)
+      !write(*,*) j, xi, cp_ext(j,i)
     end do
     !write(*,*) '6 number_of_comp', number_of_comp
   end do
   !write(*,*) '7 number_of_comp', number_of_comp
   close(41)
-  419 format(I5, 2X, F13.6, 2X, E12.6)
+  419 format(I5, 2X, F12.7, 2X, E14.9)
 end subroutine

@@ -6,7 +6,7 @@ subroutine system_def
   implicit none
 
   real*8 ls, lt
-  integer i, iflag,ii
+  integer i, iflag, ii
 
   ! input the parameters
   open(42, file="input_parameters.dat")
@@ -29,15 +29,16 @@ subroutine system_def
   read(42,*) Nmax, errmax, num_deltx
   close(42)
 
-  write(*,*) "this is ", number_of_comp, "components adsorption happened at ", name_of_stru
+  write(*,*) "this is ", number_of_comp, " components adsorption happened at ", name_of_stru
   write(*,*) "the length of stru is:", length_of_stru
   do ii = 1, number_of_comp
     write(*,*) "the gas are: ", name_of_comp(ii)
-    write(*,*) "the gas parameter is:", sigma_gas(ii), epsilon_gas(ii), X(ii)
+    write(*,*) "the gas parameter is: ", sigma_gas(ii),' ', epsilon_gas(ii),' ', X(ii)
+    write(*,*) 'the gas_wall parameters: ', sigma_gw(ii),' ', epsilon_gw(ii)
   end do
   write(*,*) "the approximation of attraction between fluids is: ", appr_of_attr
   write(*,*) "treat of wall: ", type_of_wall
-  write(*,*) 'cut_off_gg', cut_off_gg, 'cut_off_wg', cut_off_wg
+  write(*,*) 'cut_off_gg: ', cut_off_gg, ' cut_off_wg: ', cut_off_wg
 
   open(43, file="input_pressure.dat")
   num_press=0
@@ -81,10 +82,10 @@ subroutine system_def
   sigmamax = sigmamax/d_min
   write(*,*) 'sigmamax is:', sigmamax
   deltx = 1.0 / num_deltx
-  write(*,*) 'deltx=', deltx
+  write(*,*) 'relative deltx: ', deltx, ' actual deltx: ', deltx*d_min
   lt = length_of_stru/2.0+width_of_wall
   ls = length_of_stru/2.0
-  if ( ls>30 ) then
+  if ( ls>30.0 ) then
     xnf = ls - 30.0
   else
     xnf = 0.0

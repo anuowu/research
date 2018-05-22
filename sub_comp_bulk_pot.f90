@@ -107,7 +107,7 @@ function re_Ur(rhos, Ts)
   c(6) = 2*x16/Ts
   c(7) = 2*x17/Ts + 3*x18/Ts**2
   c(8) = 3*x19/Ts**2
-  
+
   d(1) = 3*x20/Ts**2 + 4*x21/Ts**3
   d(2) = 3*x22/Ts**2 + 5*x23/Ts**4
   d(3) = 3*x24/Ts**2 + 4*x25/Ts**3
