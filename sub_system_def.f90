@@ -41,15 +41,15 @@ subroutine system_def
   write(*,*) 'cut_off_gg: ', cut_off_gg, ' cut_off_wg: ', cut_off_wg
 
   open(43, file="input_pressure.dat")
-  num_press=0
-  iflag=1
+  num_press = 0
+  iflag = 1
   read(43,*)
-  do while(iflag==1)
+  do while(iflag == 1)
     num_press=num_press+1
     read(43,*) nb(num_press), pres(num_press), c, pica_factor(num_press), IFDEN(num_press), ITERA(num_press)
-    if ( nb(num_press)==0 ) then
+    if ( nb(num_press) == 0 ) then
       iflag = 0
-      num_press=num_press-1
+      num_press = num_press-1
     end if
   end do
   close(43)
@@ -81,10 +81,10 @@ subroutine system_def
   write(*,*) 'd_min is:', d_min
   sigmamax = sigmamax/d_min
   write(*,*) 'sigmamax is:', sigmamax
-  deltx = 1.0 / num_deltx
+  deltx = 1.0d0 / num_deltx
   write(*,*) 'relative deltx: ', deltx, ' actual deltx: ', deltx*d_min
-  lt = length_of_stru/2.0+width_of_wall
-  ls = length_of_stru/2.0
+  lt = length_of_stru/2.0d0+width_of_wall
+  ls = length_of_stru/2.0d0
   if ( ls>30.0 ) then
     xnf = ls - 30.0
   else
@@ -95,6 +95,8 @@ subroutine system_def
   NL = int((lt-xnf)/deltx)
 
   write(*,*) 'here the step length and total number are:', deltx, NL
+  write(*,*) 'relative distance:(dmin)'
+  write(*,*) 'half of total system is: ', lt, ' from center to wall edge is: ', ls
 
   ! calculate the saturation properity: P0, rho_bulk
 

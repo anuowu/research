@@ -18,11 +18,9 @@ program main
   call cpu_time (time(0))
   write(*,*) "input the objects' parameters"
   call system_def
-  !write(*,*) '1 number_of_comp is:' , number_of_comp
 
   write(*,*) 'calculate external potential'
   call comp_external_pot
-  !write(*,*) '2 number_of_comp is:' , number_of_comp
 
   write(*,*) 'calculate bulk chemical potential, rho0, Miu'
   call comp_bulk_pot
@@ -30,7 +28,7 @@ program main
   write(*,*) 'calculate miu_att'
   call miu_att
   ! initial the density of fluids in all position
-  !call initial_density(P)
+  ! call initial_density(P)
 
   open(31, file="out_iteration_process.dat")
   open(39, file="out_calculation_process.dat")
@@ -45,6 +43,7 @@ program main
   open(56,file="out_test_deltmiu.dat")
   write(56,*) 'numb ', ' component ', ' position ', '  Miu(kBT)  ','  cp_hs(j,k)(kBT)  ', '  cp_att(j,k)(kBT)  ', &
                '  cp_ext(j,k)(kBT)  ', '  delta_miu(kBT)'
+               
   write(*,*) "Start the main process!"
   do i = 1, num_press ! presusre
     ! need to define the initial density distribution of components
